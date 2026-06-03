@@ -24,12 +24,11 @@
 
     /* HEADER */
     .header { background: #fff; border: 1px solid var(--border); border-radius: var(--radius-lg); margin-bottom: 1.5rem; box-shadow: var(--shadow); overflow: hidden; }
-    .header-top { background: linear-gradient(120deg, #12213a 0%, #1e3a5f 100%); padding: 1.5rem 2rem; display: flex; align-items: center; justify-content: space-between; gap: 1rem; }
-    .header-logo { height: 50px; width: auto; object-fit: contain; display: block; }
-    .header-badge { background: rgba(255,255,255,0.1); border: 1px solid rgba(255,255,255,0.18); border-radius: 20px; padding: 5px 14px; font-size: 11px; font-weight: 600; color: rgba(255,255,255,0.85); letter-spacing: .7px; text-transform: uppercase; white-space: nowrap; }
-    .header-bottom { padding: 1.4rem 2rem 1.6rem; border-top: 3px solid var(--accent); }
-    .header-bottom h1 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: .35rem; }
-    .header-bottom p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
+    .header-top { padding: 1.4rem 2rem 1.6rem; border-top: 3px solid var(--accent); display: flex; align-items: flex-start; justify-content: space-between; gap: 1.5rem; }
+    .header-text { flex: 1; }
+    .header-text h1 { font-family: 'Sora', sans-serif; font-size: 22px; font-weight: 700; color: var(--text-primary); margin-bottom: .35rem; }
+    .header-text p { font-size: 13.5px; color: var(--text-secondary); line-height: 1.65; }
+    .header-logo { height: 52px; width: auto; object-fit: contain; display: block; flex-shrink: 0; }
 
     /* SECTIONS */
     .section { background: var(--bg-card); border: 1px solid var(--border); border-radius: var(--radius-lg); padding: 1.5rem; margin-bottom: 1.25rem; box-shadow: var(--shadow); }
@@ -95,9 +94,8 @@
       .two-col { grid-template-columns: 1fr; }
       .sat-item { flex-direction: column; gap: .5rem; }
       .nps-btn { width: 38px; height: 38px; font-size: 13px; }
-      .header-top { padding: 1.2rem 1.25rem; }
-      .header-bottom { padding: 1.1rem 1.25rem 1.3rem; }
-      .header-logo { height: 38px; }
+      .header-top { padding: 1.1rem 1.25rem 1.3rem; gap: 1rem; }
+      .header-logo { height: 40px; }
     }
   </style>
 </head>
@@ -106,12 +104,11 @@
 
   <div class="header">
     <div class="header-top">
+      <div class="header-text">
+        <h1>Partner Feedback Form</h1>
+        <p>Help us improve our services to colleges &amp; universities. Your feedback shapes our next quarter.</p>
+      </div>
       <img src="Face prep logo3.png" alt="FACE Prep Logo" class="header-logo" />
-      <span class="header-badge">Partner Feedback</span>
-    </div>
-    <div class="header-bottom">
-      <h1>Partner Feedback Form</h1>
-      <p>Help us improve our services to colleges &amp; universities. Your feedback shapes our next quarter.</p>
     </div>
   </div>
 
@@ -209,7 +206,7 @@
     </div>
 
     <div class="section">
-      <div class="section-label"><i class="ti ti-clipboard-check"></i> Satisfaction - Yes / No</div>
+      <div class="section-label"><i class="ti ti-clipboard-check"></i> Satisfaction Metrics</div>
       <div class="sat-list">
         <div class="sat-item">
           <div class="sat-q">Are you satisfied with the quality of the deployed faculties?</div>
