@@ -185,6 +185,7 @@
     }
     textarea { min-height: 85px; resize: vertical; line-height: 1.6; }
     input::placeholder, textarea::placeholder { color: var(--text-hint); }
+    select { background-image: url("data:image/svg+xml,%3Csvg xmlns='http://www.w3.org/2000/svg' width='12' height='12' viewBox='0 0 24 24' fill='none' stroke='%2394a3b8' stroke-width='2'%3E%3Cpolyline points='6 9 12 15 18 9'%3E%3C/polyline%3E%3C/svg%3E"); background-repeat: no-repeat; background-position: right 12px center; padding-right: 36px; }
 
     /* ── NPS ── */
     .nps-grid {
@@ -352,7 +353,8 @@
   <!-- Header -->
   <div class="header">
     <div class="logo-row">
-      <img src="Face prep logo3.png" alt="FACE Prep Logo" style="height: 48px; width: auto; object-fit: contain;" />
+      <div class="logo-badge">FP</div>
+      <span class="brand-name">FACE Prep</span>
     </div>
     <h1>Partner Feedback Form</h1>
     <p>Help us improve our services to colleges &amp; universities. Your feedback shapes our next quarter.</p>
@@ -376,15 +378,9 @@
         </div>
       </div>
 
-      <div class="two-col">
-        <div class="field">
-          <label>Email ID</label>
-          <input type="text" id="emailId" placeholder="Official email ID" />
-        </div>
-        <div class="field">
-          <label>Mobile Number</label>
-          <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" />
-        </div>
+      <div class="field">
+        <label>Mobile Number</label>
+        <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" />
       </div>
 
       <div class="two-col">
@@ -394,7 +390,31 @@
         </div>
         <div class="field">
           <label>College / University <span class="req">*</span></label>
-          <input type="text" id="college" placeholder="Institution name" required />
+          <select id="college" required>
+            <option value="">— Select your institution —</option>
+            <option>Kamaraj College</option>
+            <option>Kamaraj Women's College</option>
+            <option>SDNB Vaishnav College for Women</option>
+            <option>Patrician College of Arts & Science</option>
+            <option>TERF's College of Arts and Science</option>
+            <option>Sree Saraswathi Thyagaraja College</option>
+            <option>TJS College of Arts and Science</option>
+            <option>Bharathidasan College of Arts & Science</option>
+            <option>Nagarathinam Angalammal Arts & Science College</option>
+            <option>Vinayaga Mission's Research Foundation School of Arts & Science</option>
+            <option>Sri Amaraavathi College of Arts & Science</option>
+            <option>Takshashila University</option>
+            <option>Study World Group of Institution</option>
+            <option>Rathinam College of Arts & Science</option>
+            <option>Noorul Islam Centre for Higher Education (NICHE)</option>
+            <option>AMET University</option>
+            <option>Joy University</option>
+            <option>Sasurie College of Arts and Science</option>
+            <option>Alliance University</option>
+            <option>Kristu Jayanti (Deemed to be University)</option>
+            <option>S-VYASA University</option>
+            <option>Asian School of Business</option>
+          </select>
         </div>
       </div>
     </div>
@@ -530,8 +550,8 @@
      Replace the two values below with your own
      Supabase project URL and anon/public key.
   ══════════════════════════════════════════ */
-  const SUPABASE_URL    = 'https://rysajbwcuieovbsllaas.supabase.co';   // ← replace
-  const SUPABASE_ANON   = 'eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9.eyJpc3MiOiJzdXBhYmFzZSIsInJlZiI6InJ5c2FqYndjdWllb3Zic2xsYWFzIiwicm9sZSI6ImFub24iLCJpYXQiOjE3ODA0NjI3MjgsImV4cCI6MjA5NjAzODcyOH0.2WenjYKsfQYAeUJxVJcEVQwqYUlfwrYltrMuC9Ggu4A';               // ← replace
+  const SUPABASE_URL    = 'https://YOUR_PROJECT_ID.supabase.co';   // ← replace
+  const SUPABASE_ANON   = 'YOUR_SUPABASE_ANON_KEY';               // ← replace
   const TABLE_NAME      = 'faceprep_feedback';                     // ← your table name
 
   const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
@@ -623,7 +643,6 @@
     const payload = {
       full_name                     : document.getElementById('fullName').value.trim(),
       email_address                 : document.getElementById('emailAddr').value.trim(),
-      email_id                      : document.getElementById('emailId').value.trim() || null,
       mobile_number                 : document.getElementById('mobile').value.trim() || null,
       designation                   : document.getElementById('designation').value.trim(),
       college_university            : document.getElementById('college').value.trim(),
