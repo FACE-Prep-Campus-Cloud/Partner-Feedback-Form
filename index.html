@@ -1,0 +1,672 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+  <meta charset="UTF-8" />
+  <meta name="viewport" content="width=device-width, initial-scale=1.0" />
+  <title>FACE Prep – Partner Feedback Form</title>
+
+  <!-- Supabase CDN -->
+  <script src="https://cdn.jsdelivr.net/npm/@supabase/supabase-js@2"></script>
+
+  <!-- Google Fonts -->
+  <link href="https://fonts.googleapis.com/css2?family=DM+Sans:wght@400;500;600&family=Playfair+Display:wght@600&display=swap" rel="stylesheet" />
+
+  <!-- Tabler Icons -->
+  <link rel="stylesheet" href="https://cdn.jsdelivr.net/npm/@tabler/icons-webfont@latest/dist/tabler-icons.min.css" />
+
+  <style>
+    /* ── Reset ── */
+    *, *::before, *::after { box-sizing: border-box; margin: 0; padding: 0; }
+
+    /* ── Root / Light palette ── */
+    :root {
+      --bg-page:        #f0f4f8;
+      --bg-card:        #ffffff;
+      --bg-section:     #f8fafc;
+      --accent:         #f97316;
+      --accent-light:   #fff4ec;
+      --accent-hover:   #ea6a0a;
+      --border:         #e2e8f0;
+      --border-focus:   #f97316;
+      --text-primary:   #1e293b;
+      --text-secondary: #64748b;
+      --text-hint:      #94a3b8;
+      --success-bg:     #ecfdf5;
+      --success-text:   #166534;
+      --success-border: #86efac;
+      --danger-bg:      #fff1f2;
+      --danger-text:    #9f1239;
+      --danger-border:  #fda4af;
+      --radius-sm:      6px;
+      --radius-md:      10px;
+      --radius-lg:      14px;
+      --shadow-card:    0 1px 3px rgba(0,0,0,0.06), 0 4px 16px rgba(0,0,0,0.04);
+    }
+
+    /* ── Page ── */
+    body {
+      font-family: 'DM Sans', sans-serif;
+      background: var(--bg-page);
+      color: var(--text-primary);
+      min-height: 100vh;
+      padding: 2rem 1rem 4rem;
+    }
+
+    .container {
+      max-width: 700px;
+      margin: 0 auto;
+    }
+
+    /* ── Header banner ── */
+    .header {
+      background: linear-gradient(135deg, #fff7f0 0%, #fff4ec 100%);
+      border: 1px solid #fed7aa;
+      border-radius: var(--radius-lg);
+      padding: 2rem 2rem 1.75rem;
+      margin-bottom: 1.5rem;
+      position: relative;
+      overflow: hidden;
+    }
+    .header::before {
+      content: '';
+      position: absolute;
+      top: -40px; right: -40px;
+      width: 160px; height: 160px;
+      border-radius: 50%;
+      background: rgba(249,115,22,0.07);
+    }
+    .header::after {
+      content: '';
+      position: absolute;
+      bottom: -30px; left: 30px;
+      width: 100px; height: 100px;
+      border-radius: 50%;
+      background: rgba(249,115,22,0.05);
+    }
+    .logo-row {
+      display: flex;
+      align-items: center;
+      gap: 10px;
+      margin-bottom: 1rem;
+      position: relative;
+      z-index: 1;
+    }
+    .logo-badge {
+      width: 38px; height: 38px;
+      border-radius: 8px;
+      background: var(--accent);
+      display: flex; align-items: center; justify-content: center;
+      font-weight: 600; font-size: 13px; color: #fff;
+      letter-spacing: .4px;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.35);
+    }
+    .brand-name {
+      font-family: 'Playfair Display', serif;
+      font-size: 18px;
+      color: var(--text-primary);
+      font-weight: 600;
+    }
+    .header h1 {
+      font-family: 'Playfair Display', serif;
+      font-size: 24px;
+      color: var(--text-primary);
+      margin-bottom: .4rem;
+      position: relative; z-index: 1;
+    }
+    .header p {
+      font-size: 13.5px;
+      color: var(--text-secondary);
+      line-height: 1.6;
+      position: relative; z-index: 1;
+    }
+
+    /* ── Section cards ── */
+    .section {
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 1.5rem;
+      margin-bottom: 1.25rem;
+      box-shadow: var(--shadow-card);
+    }
+    .section-label {
+      font-size: 10.5px;
+      font-weight: 600;
+      letter-spacing: 1.4px;
+      color: var(--accent);
+      text-transform: uppercase;
+      margin-bottom: 1.1rem;
+      display: flex;
+      align-items: center;
+      gap: 6px;
+    }
+    .section-label i { font-size: 15px; }
+
+    /* ── Form fields ── */
+    .two-col { display: grid; grid-template-columns: 1fr 1fr; gap: 14px; }
+    .field { margin-bottom: 1rem; }
+    .field:last-child { margin-bottom: 0; }
+
+    label {
+      display: block;
+      font-size: 13px;
+      font-weight: 500;
+      color: var(--text-secondary);
+      margin-bottom: 5px;
+      letter-spacing: .1px;
+    }
+    .req { color: var(--accent); margin-left: 2px; }
+
+    input[type="text"],
+    input[type="email"],
+    input[type="tel"],
+    select,
+    textarea {
+      width: 100%;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 14px;
+      padding: 9px 12px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-md);
+      background: var(--bg-section);
+      color: var(--text-primary);
+      outline: none;
+      transition: border-color .15s, box-shadow .15s;
+      appearance: none;
+    }
+    input[type="text"]:focus,
+    input[type="email"]:focus,
+    input[type="tel"]:focus,
+    select:focus,
+    textarea:focus {
+      border-color: var(--border-focus);
+      background: #fff;
+      box-shadow: 0 0 0 3px rgba(249,115,22,0.12);
+    }
+    textarea { min-height: 85px; resize: vertical; line-height: 1.6; }
+    input::placeholder, textarea::placeholder { color: var(--text-hint); }
+
+    /* ── NPS ── */
+    .nps-grid {
+      display: flex;
+      gap: 5px;
+      flex-wrap: wrap;
+      margin-top: .5rem;
+    }
+    .nps-btn {
+      width: 46px; height: 46px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-section);
+      color: var(--text-secondary);
+      font-size: 14px;
+      font-weight: 500;
+      cursor: pointer;
+      transition: all .15s;
+      font-family: 'DM Sans', sans-serif;
+    }
+    .nps-btn:hover {
+      border-color: var(--accent);
+      color: var(--accent);
+      background: var(--accent-light);
+    }
+    .nps-btn.active {
+      background: var(--accent);
+      border-color: var(--accent);
+      color: #fff;
+      box-shadow: 0 2px 8px rgba(249,115,22,0.3);
+    }
+    .nps-footer {
+      display: flex;
+      justify-content: space-between;
+      margin-top: .4rem;
+    }
+    .nps-footer span { font-size: 11.5px; color: var(--text-hint); }
+
+    /* ── Satisfaction Yes / No ── */
+    .sat-list { display: flex; flex-direction: column; gap: 0; }
+    .sat-item {
+      display: flex;
+      align-items: flex-start;
+      justify-content: space-between;
+      gap: 1rem;
+      padding: .85rem 0;
+      border-bottom: 1px solid var(--border);
+    }
+    .sat-item:last-child { border-bottom: none; padding-bottom: 0; }
+    .sat-item:first-child { padding-top: 0; }
+    .sat-q {
+      font-size: 13.5px;
+      color: var(--text-primary);
+      line-height: 1.55;
+      flex: 1;
+    }
+    .yn-pair {
+      display: flex;
+      gap: 6px;
+      flex-shrink: 0;
+    }
+    .yn-btn {
+      padding: 6px 16px;
+      border: 1px solid var(--border);
+      border-radius: var(--radius-sm);
+      background: var(--bg-section);
+      font-family: 'DM Sans', sans-serif;
+      font-size: 13px;
+      font-weight: 500;
+      cursor: pointer;
+      color: var(--text-secondary);
+      transition: all .15s;
+      display: flex;
+      align-items: center;
+      gap: 5px;
+    }
+    .yn-btn i { font-size: 13px; }
+    .yn-btn:hover { border-color: #94a3b8; }
+    .yn-btn.yes.active {
+      background: var(--success-bg);
+      border-color: var(--success-border);
+      color: var(--success-text);
+    }
+    .yn-btn.no.active {
+      background: var(--danger-bg);
+      border-color: var(--danger-border);
+      color: var(--danger-text);
+    }
+
+    /* ── Submit ── */
+    .submit-wrap { margin-top: .25rem; }
+    .submit-btn {
+      width: 100%;
+      padding: 13px;
+      background: var(--accent);
+      border: none;
+      border-radius: var(--radius-md);
+      color: #fff;
+      font-family: 'DM Sans', sans-serif;
+      font-size: 15px;
+      font-weight: 600;
+      cursor: pointer;
+      transition: all .15s;
+      letter-spacing: .2px;
+      display: flex;
+      align-items: center;
+      justify-content: center;
+      gap: 8px;
+      box-shadow: 0 2px 10px rgba(249,115,22,0.35);
+    }
+    .submit-btn:hover { background: var(--accent-hover); transform: translateY(-1px); box-shadow: 0 4px 16px rgba(249,115,22,0.4); }
+    .submit-btn:active { transform: translateY(0); }
+    .submit-btn:disabled { background: #fdba74; cursor: not-allowed; transform: none; box-shadow: none; }
+
+    /* ── Toast / Status ── */
+    #statusMsg {
+      display: none;
+      padding: 10px 14px;
+      border-radius: var(--radius-md);
+      font-size: 13.5px;
+      font-weight: 500;
+      margin-top: .75rem;
+      text-align: center;
+    }
+    #statusMsg.success { display: block; background: var(--success-bg); color: var(--success-text); border: 1px solid var(--success-border); }
+    #statusMsg.error   { display: block; background: var(--danger-bg);  color: var(--danger-text);  border: 1px solid var(--danger-border); }
+
+    /* ── Success screen ── */
+    #successScreen {
+      display: none;
+      text-align: center;
+      background: var(--bg-card);
+      border: 1px solid var(--border);
+      border-radius: var(--radius-lg);
+      padding: 3rem 2rem;
+      box-shadow: var(--shadow-card);
+    }
+    #successScreen.show { display: block; }
+    .success-circle {
+      width: 64px; height: 64px;
+      border-radius: 50%;
+      background: var(--success-bg);
+      border: 2px solid var(--success-border);
+      display: flex; align-items: center; justify-content: center;
+      font-size: 28px;
+      color: var(--success-text);
+      margin: 0 auto 1.25rem;
+    }
+    #successScreen h2 { font-size: 20px; font-weight: 600; color: var(--text-primary); margin-bottom: .5rem; }
+    #successScreen p  { font-size: 14px; color: var(--text-secondary); line-height: 1.7; }
+
+    /* ── Responsive ── */
+    @media (max-width: 520px) {
+      .two-col { grid-template-columns: 1fr; }
+      .sat-item { flex-direction: column; gap: .5rem; }
+      .nps-btn { width: 38px; height: 38px; font-size: 13px; }
+      .header { padding: 1.5rem; }
+    }
+  </style>
+</head>
+<body>
+
+<div class="container">
+
+  <!-- Header -->
+  <div class="header">
+    <div class="logo-row">
+      <div class="logo-badge">FP</div>
+      <span class="brand-name">FACE Prep</span>
+    </div>
+    <h1>Partner Feedback Form</h1>
+    <p>Help us improve our services to colleges &amp; universities. Your feedback shapes our next quarter.</p>
+  </div>
+
+  <!-- Form -->
+  <form id="feedbackForm" novalidate>
+
+    <!-- Contact Info -->
+    <div class="section">
+      <div class="section-label"><i class="ti ti-user"></i> Contact Information</div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Full Name <span class="req">*</span></label>
+          <input type="text" id="fullName" placeholder="Dr. / Mr. / Ms. Full Name" required />
+        </div>
+        <div class="field">
+          <label>Email Address <span class="req">*</span></label>
+          <input type="email" id="emailAddr" placeholder="name@college.edu" required />
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Email ID</label>
+          <input type="text" id="emailId" placeholder="Official email ID" />
+        </div>
+        <div class="field">
+          <label>Mobile Number</label>
+          <input type="tel" id="mobile" placeholder="+91 XXXXX XXXXX" />
+        </div>
+      </div>
+
+      <div class="two-col">
+        <div class="field">
+          <label>Designation <span class="req">*</span></label>
+          <input type="text" id="designation" placeholder="e.g. Training & Placement Officer" required />
+        </div>
+        <div class="field">
+          <label>College / University <span class="req">*</span></label>
+          <input type="text" id="college" placeholder="Institution name" required />
+        </div>
+      </div>
+    </div>
+
+    <!-- NPS -->
+    <div class="section">
+      <div class="section-label"><i class="ti ti-star"></i> Recommendation Score</div>
+      <label style="font-size:13.5px; color:var(--text-primary); margin-bottom:.6rem; display:block; line-height:1.55">
+        Considering FACE Prep's overall contribution to student academic progress, skill development and employability outcomes, how likely are you to recommend FACE Prep to another college/university? <span class="req">*</span>
+      </label>
+      <div class="nps-grid" id="npsGrid">
+        <button type="button" class="nps-btn" data-val="0"  onclick="pickNps(this)">0</button>
+        <button type="button" class="nps-btn" data-val="1"  onclick="pickNps(this)">1</button>
+        <button type="button" class="nps-btn" data-val="2"  onclick="pickNps(this)">2</button>
+        <button type="button" class="nps-btn" data-val="3"  onclick="pickNps(this)">3</button>
+        <button type="button" class="nps-btn" data-val="4"  onclick="pickNps(this)">4</button>
+        <button type="button" class="nps-btn" data-val="5"  onclick="pickNps(this)">5</button>
+        <button type="button" class="nps-btn" data-val="6"  onclick="pickNps(this)">6</button>
+        <button type="button" class="nps-btn" data-val="7"  onclick="pickNps(this)">7</button>
+        <button type="button" class="nps-btn" data-val="8"  onclick="pickNps(this)">8</button>
+        <button type="button" class="nps-btn" data-val="9"  onclick="pickNps(this)">9</button>
+        <button type="button" class="nps-btn" data-val="10" onclick="pickNps(this)">10</button>
+      </div>
+      <div class="nps-footer">
+        <span>0 — Not likely at all</span>
+        <span>10 — Extremely likely</span>
+      </div>
+    </div>
+
+    <!-- Open Feedback -->
+    <div class="section">
+      <div class="section-label"><i class="ti ti-message"></i> Open Feedback</div>
+      <div class="field">
+        <label>What did FACE Prep do best this period?</label>
+        <textarea id="bestThing" placeholder="Share what stood out positively..."></textarea>
+      </div>
+      <div class="field">
+        <label>What is the one improvement you expect in the next quarter?</label>
+        <textarea id="improvement" placeholder="Your suggestion for improvement..."></textarea>
+      </div>
+    </div>
+
+    <!-- Satisfaction Yes/No -->
+    <div class="section">
+      <div class="section-label"><i class="ti ti-checkbox"></i> Satisfaction — Yes / No</div>
+      <div class="sat-list">
+
+        <div class="sat-item">
+          <div class="sat-q">Are you satisfied with the quality of the deployed faculties?</div>
+          <div class="yn-pair">
+            <button type="button" class="yn-btn yes" data-key="faculty" data-val="yes" onclick="pickYN(this)">
+              <i class="ti ti-check"></i> Yes
+            </button>
+            <button type="button" class="yn-btn no" data-key="faculty" data-val="no" onclick="pickYN(this)">
+              <i class="ti ti-x"></i> No
+            </button>
+          </div>
+        </div>
+
+        <div class="sat-item">
+          <div class="sat-q">Are you satisfied with the quality and relevance of the training content delivered?</div>
+          <div class="yn-pair">
+            <button type="button" class="yn-btn yes" data-key="content" data-val="yes" onclick="pickYN(this)">
+              <i class="ti ti-check"></i> Yes
+            </button>
+            <button type="button" class="yn-btn no" data-key="content" data-val="no" onclick="pickYN(this)">
+              <i class="ti ti-x"></i> No
+            </button>
+          </div>
+        </div>
+
+        <div class="sat-item">
+          <div class="sat-q">Are you satisfied with the academic operations support provided by FACE Prep?</div>
+          <div class="yn-pair">
+            <button type="button" class="yn-btn yes" data-key="ops" data-val="yes" onclick="pickYN(this)">
+              <i class="ti ti-check"></i> Yes
+            </button>
+            <button type="button" class="yn-btn no" data-key="ops" data-val="no" onclick="pickYN(this)">
+              <i class="ti ti-x"></i> No
+            </button>
+          </div>
+        </div>
+
+        <div class="sat-item">
+          <div class="sat-q">Are you satisfied with the skill development initiatives delivered for students?</div>
+          <div class="yn-pair">
+            <button type="button" class="yn-btn yes" data-key="skills" data-val="yes" onclick="pickYN(this)">
+              <i class="ti ti-check"></i> Yes
+            </button>
+            <button type="button" class="yn-btn no" data-key="skills" data-val="no" onclick="pickYN(this)">
+              <i class="ti ti-x"></i> No
+            </button>
+          </div>
+        </div>
+
+        <div class="sat-item">
+          <div class="sat-q">Are you satisfied with the internship/placement support provided by FACE Prep?</div>
+          <div class="yn-pair">
+            <button type="button" class="yn-btn yes" data-key="placement" data-val="yes" onclick="pickYN(this)">
+              <i class="ti ti-check"></i> Yes
+            </button>
+            <button type="button" class="yn-btn no" data-key="placement" data-val="no" onclick="pickYN(this)">
+              <i class="ti ti-x"></i> No
+            </button>
+          </div>
+        </div>
+
+      </div>
+    </div>
+
+    <!-- Submit -->
+    <div class="submit-wrap">
+      <button type="button" class="submit-btn" id="submitBtn" onclick="submitForm()">
+        <i class="ti ti-send"></i> Submit Feedback
+      </button>
+      <div id="statusMsg"></div>
+    </div>
+
+  </form>
+
+  <!-- Success Screen -->
+  <div id="successScreen">
+    <div class="success-circle"><i class="ti ti-check"></i></div>
+    <h2>Thank you for your feedback!</h2>
+    <p>Your response has been saved successfully.<br>FACE Prep values your partnership and will act on your inputs to serve your institution better next quarter.</p>
+  </div>
+
+</div><!-- /container -->
+
+<script>
+  /* ══════════════════════════════════════════
+     1. SUPABASE CONFIGURATION
+     Replace the two values below with your own
+     Supabase project URL and anon/public key.
+  ══════════════════════════════════════════ */
+  const SUPABASE_URL    = 'https://YOUR_PROJECT_ID.supabase.co';   // ← replace
+  const SUPABASE_ANON   = 'YOUR_SUPABASE_ANON_KEY';               // ← replace
+  const TABLE_NAME      = 'faceprep_feedback';                     // ← your table name
+
+  const supabaseClient = supabase.createClient(SUPABASE_URL, SUPABASE_ANON);
+
+  /* ══════════════════════════════════════════
+     2. STATE
+  ══════════════════════════════════════════ */
+  let npsValue = null;
+  const ynValues = {
+    faculty   : null,
+    content   : null,
+    ops       : null,
+    skills    : null,
+    placement : null,
+  };
+
+  /* ══════════════════════════════════════════
+     3. NPS PICKER
+  ══════════════════════════════════════════ */
+  function pickNps(btn) {
+    document.querySelectorAll('.nps-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    npsValue = parseInt(btn.dataset.val, 10);
+  }
+
+  /* ══════════════════════════════════════════
+     4. YES / NO PICKER
+  ══════════════════════════════════════════ */
+  function pickYN(btn) {
+    const key = btn.dataset.key;
+    const val = btn.dataset.val;
+    // Clear sibling
+    btn.closest('.yn-pair').querySelectorAll('.yn-btn').forEach(b => b.classList.remove('active'));
+    btn.classList.add('active');
+    ynValues[key] = val;
+  }
+
+  /* ══════════════════════════════════════════
+     5. VALIDATION
+  ══════════════════════════════════════════ */
+  function validate() {
+    const required = ['fullName', 'emailAddr', 'designation', 'college'];
+    for (const id of required) {
+      const el = document.getElementById(id);
+      if (!el.value.trim()) {
+        el.focus();
+        showStatus(`Please fill in the "${el.previousElementSibling.textContent.trim().replace(' *','')}" field.`, 'error');
+        return false;
+      }
+    }
+    const emailRe = /^[^\s@]+@[^\s@]+\.[^\s@]+$/;
+    if (!emailRe.test(document.getElementById('emailAddr').value.trim())) {
+      showStatus('Please enter a valid email address.', 'error');
+      return false;
+    }
+    if (npsValue === null) {
+      showStatus('Please select a recommendation score (0–10).', 'error');
+      return false;
+    }
+    return true;
+  }
+
+  /* ══════════════════════════════════════════
+     6. STATUS HELPER
+  ══════════════════════════════════════════ */
+  function showStatus(msg, type) {
+    const el = document.getElementById('statusMsg');
+    el.textContent = msg;
+    el.className = type;
+    el.style.display = 'block';
+  }
+  function hideStatus() {
+    const el = document.getElementById('statusMsg');
+    el.style.display = 'none';
+    el.className = '';
+  }
+
+  /* ══════════════════════════════════════════
+     7. SUBMIT → SUPABASE INSERT
+  ══════════════════════════════════════════ */
+  async function submitForm() {
+    hideStatus();
+    if (!validate()) return;
+
+    const btn = document.getElementById('submitBtn');
+    btn.disabled = true;
+    btn.innerHTML = '<i class="ti ti-loader-2" style="animation:spin 1s linear infinite"></i> Submitting…';
+
+    const payload = {
+      full_name                     : document.getElementById('fullName').value.trim(),
+      email_address                 : document.getElementById('emailAddr').value.trim(),
+      email_id                      : document.getElementById('emailId').value.trim() || null,
+      mobile_number                 : document.getElementById('mobile').value.trim() || null,
+      designation                   : document.getElementById('designation').value.trim(),
+      college_university            : document.getElementById('college').value.trim(),
+      recommendation_score          : npsValue,
+      best_this_period              : document.getElementById('bestThing').value.trim() || null,
+      improvement_next_quarter      : document.getElementById('improvement').value.trim() || null,
+      satisfied_faculty             : ynValues.faculty,
+      satisfied_content             : ynValues.content,
+      satisfied_academic_ops        : ynValues.ops,
+      satisfied_skill_development   : ynValues.skills,
+      satisfied_placement_support   : ynValues.placement,
+      submitted_at                  : new Date().toISOString(),
+    };
+
+    try {
+      const { error } = await supabaseClient.from(TABLE_NAME).insert([payload]);
+
+      if (error) {
+        console.error('Supabase error:', error);
+        showStatus('Submission failed: ' + (error.message || 'Unknown error. Please try again.'), 'error');
+        btn.disabled = false;
+        btn.innerHTML = '<i class="ti ti-send"></i> Submit Feedback';
+        return;
+      }
+
+      // Success
+      document.getElementById('feedbackForm').style.display = 'none';
+      document.getElementById('successScreen').classList.add('show');
+
+    } catch (err) {
+      console.error('Network error:', err);
+      showStatus('A network error occurred. Please check your connection and try again.', 'error');
+      btn.disabled = false;
+      btn.innerHTML = '<i class="ti ti-send"></i> Submit Feedback';
+    }
+  }
+
+  /* ── Spinner keyframe ── */
+  const style = document.createElement('style');
+  style.textContent = '@keyframes spin { to { transform: rotate(360deg); } }';
+  document.head.appendChild(style);
+</script>
+
+</body>
+</html>
